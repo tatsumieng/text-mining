@@ -18,15 +18,9 @@ def process_file(filename, skip_header):
     hist = {}
     fp = open(filename, encoding='UTF8')
 
-    if skip_header:
-        skip_gutenberg_header(fp)
-
     strippables = string.punctuation + string.whitespace
 
     for line in fp:
-        if line.startswith('*** END OF THIS PROJECT'):
-            break
-
         line = line.replace('-', ' ')
 
         for word in line.split():
@@ -37,15 +31,6 @@ def process_file(filename, skip_header):
             hist[word] = hist.get(word, 0) + 1
 
     return hist
-
-
-def skip_gutenberg_header(fp):
-    """
-    Skips header in the text
-    """
-    for line in fp:
-        if line.startswith('*** START OF THIS PROJECT'):
-            break
 
 def total_words(hist):
     """
@@ -115,11 +100,13 @@ def main():
     romeoandjuliet = process_file('data/romeoandjuliet.txt', skip_header=False)
 
     diff = subtract(hist, hamlet)
-    print("The words in the book that aren't in the word list are:")
+    print("The words in romeo and juliet that aren't in hamlet are:")
     for word in diff.keys():
         print(word, end=' ')
 
+    content1 = romeoandjuliet
+    content2 = hamlet
     similarity(content1, content2)
-    
+
 if __name__ == '__main__':
     main()
